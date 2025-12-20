@@ -1,105 +1,109 @@
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from "react-router-dom";
 import './Login.css';
 
 export default function CorporateLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
 
-  const handleSubmit = async () => {
-    setEmailError('');
-    setPasswordError('');
+    const handleSubmit = async () => {
+        setEmailError('');
+        setPasswordError('');
 
-    let isValid = true;
+        let isValid = true;
 
-    if (!email) {
-      setEmailError('Email is required');
-      isValid = false;
-    } else if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email address');
-      isValid = false;
-    }
+        if (!email) {
+        setEmailError('Email is required');
+        isValid = false;
+        } else if (!validateEmail(email)) {
+        setEmailError('Please enter a valid email address');
+        isValid = false;
+        }
 
-    if (!password) {
-      setPasswordError('Password is required');
-      isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
-      isValid = false;
-    }
+        if (!password) {
+        setPasswordError('Password is required');
+        isValid = false;
+        } else if (password.length < 6) {
+        setPasswordError('Password must be at least 6 characters');
+        isValid = false;
+        }
 
-    if (!isValid) return;
+        if (!isValid) return;
 
-    setIsLoading(true);
+        setIsLoading(true);
 
-    try {
-      // Get Firebase auth instance (initialized in main.jsx)
-      const auth = getAuth();
-      
-      // Sign in with Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
-      console.log('User signed in:', userCredential.user);
-      
-      // Show success message
-      setIsLoading(false);
-      setShowSuccess(true);
-      
-      setTimeout(() => {
-        setShowSuccess(false);
-        // Redirect to dashboard or home page
-        // window.location.href = '/dashboard';
-      }, 2000);
+        try {
+        // Get Firebase auth instance (initialized in main.jsx)
+        const auth = getAuth();
+        
+        // Sign in with Firebase
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        console.log('User signed in:', userCredential.user);
+        
+        // Show success message
+        setIsLoading(false);
+        setShowSuccess(true);
+        
+        const userData = {
+            email,
+        };
+        setTimeout(() => {
+            setShowSuccess(false);
+            navigate("/DECA-web-project/Home", {state: userData});
+        }, 2000);
 
-    } catch (error) {
-      setIsLoading(false);
-      
-      console.error('Login error:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
-      
-      // Handle specific Firebase errors
-      switch (error.code) {
-        case 'auth/user-not-found':
-        case 'auth/invalid-credential':
-        case 'auth/wrong-password':
-          setPasswordError('Invalid email or password');
-          break;
-        case 'auth/invalid-email':
-          setEmailError('Invalid email address');
-          break;
-        case 'auth/user-disabled':
-          setEmailError('This account has been disabled');
-          break;
-        case 'auth/too-many-requests':
-          setPasswordError('Too many failed attempts. Try again later');
-          break;
-        case 'auth/configuration-not-found':
-        case 'auth/api-key-not-valid':
-          setPasswordError('Authentication service not configured properly');
-          break;
-        default:
-          setPasswordError('Login failed: ' + (error.message || 'Please try again'));
-      }
-    }
-  };
+        } catch (error) {
+        setIsLoading(false);
+        
+        console.error('Login error:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        
+        // Handle specific Firebase errors
+        switch (error.code) {
+            case 'auth/user-not-found':
+            case 'auth/invalid-credential':
+            case 'auth/wrong-password':
+            setPasswordError('Invalid email or password');
+            break;
+            case 'auth/invalid-email':
+            setEmailError('Invalid email address');
+            break;
+            case 'auth/user-disabled':
+            setEmailError('This account has been disabled');
+            break;
+            case 'auth/too-many-requests':
+            setPasswordError('Too many failed attempts. Try again later');
+            break;
+            case 'auth/configuration-not-found':
+            case 'auth/api-key-not-valid':
+            setPasswordError('Authentication service not configured properly');
+            break;
+            default:
+            setPasswordError('Login failed: ' + (error.message || 'Please try again'));
+        }
+        }
+    };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-    }
-  };
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+        handleSubmit();
+        }
+    };
 
   return (
     <div className="login-container">

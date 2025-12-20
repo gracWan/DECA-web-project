@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { StrictMode } from 'react'
 import { BrowserRouter } from 'react-router-dom';
 import { createRoot } from 'react-dom/client'
-import Login from './Login.jsx'
+import App from './App.jsx'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAq7hjl4XDtTfr9Q7HleAYZUO_Q3-CWo20",
@@ -15,14 +15,12 @@ const firebaseConfig = {
   measurementId: "G-GEEKVPKTDZ"
 };
 
-const app = initializeApp(firebaseConfig);
-
-export default app;
+initializeApp(firebaseConfig);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Login />
+      <App/>
     </BrowserRouter>
   </StrictMode>,
 )
