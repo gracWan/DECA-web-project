@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import './Login.css';
+
+//Original design credits to: https://github.com/puikinsh/login-forms/blob/main/forms/corporate/style.css
+//Accessed on December 20, 2025
 
 export default function CorporateLogin() {
     const navigate = useNavigate();
@@ -110,7 +114,7 @@ export default function CorporateLogin() {
       <div className="login-card">
         <div className="login-header">
           <h2>Welcome Back</h2>
-          <p>Please sign in to your corporate account</p>
+          <p>Please sign in to your account</p>
         </div>
         
         <div className="login-form">
@@ -126,7 +130,7 @@ export default function CorporateLogin() {
                 required
                 autoComplete="email"
               />
-              <label htmlFor="email">Business Email</label>
+              <label htmlFor="email">Email</label>
               <span className="input-border"></span>
             </div>
             <span className={`error-message ${emailError ? 'show' : ''}`}>{emailError}</span>
@@ -186,13 +190,11 @@ export default function CorporateLogin() {
           </button>
         </div>
         
-        <div className="footer-links">
-          <a href="#" className="footer-link">Privacy Policy</a>
-          <span className="separator">•</span>
-          <a href="#" className="footer-link">Terms of Service</a>
-          <span className="separator">•</span>
-          <a href="#" className="footer-link">Support</a>
-        </div>
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <p style={{ color: '#64748b', fontSize: '14px' }}>
+              Don't have an account? <a href="/DECA-web-project/Register" style={{ color: '#2563eb', fontWeight: '600', textDecoration: 'none' }}>Join us here</a>
+            </p>
+          </div>
         
         <div className={`success-message ${showSuccess ? 'show' : ''}`} id="successMessage">
           <div className="success-icon">✓</div>
