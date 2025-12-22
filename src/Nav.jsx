@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import logo from './img/Logo.png'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -117,7 +118,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar-container">
           <a className="navbar-brand" href="/DECA-web-project/Home">
-            DECA
+            <img src={logo} style={{ height: '45px' }}/>
           </a>
           <button 
             className="navbar-toggler" 
